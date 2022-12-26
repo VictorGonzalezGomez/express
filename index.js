@@ -1,3 +1,4 @@
+const fs = require('fs');
 const express = require('express');
 const app = express();
 const PORT = 3000;
@@ -10,8 +11,15 @@ app.listen(PORT, (err)=>{
     console.log("Server listening on Port", PORT);
 })
 
-app.get('/', (req, res) => {
-    res.sendFile(`${__dirname}/index.html`);
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/index.html");
 })
-
+//adding songs to repertory.json
+app.post("/canciones", (req, res) => {
+    const song = req.body;
+    const repertory = JSON.parse(fs.readFileSync('repertory.json', 'utf8'));
+    repertory.push(song);
+    fs.writeFileSync('repertory.json', JSON.stringify(songs));
+    res.send('song added succesfully')
+});
 
